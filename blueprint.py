@@ -57,4 +57,13 @@ def test_config(config):
         except tweepy.TweepError:
             errors.append("Invalid authentication Data!")
 
+    if "other_notifier" in config:
+        webhookurl = config["other_webhook_url"]
+        try:
+            resp = rq.get(webhookurl)
+            if not resp.status_code == 200:
+                errors.append("Could not verify that the Webhook is working!")
+        except rq.exceptions.RequestException as e:
+            errors.append("Invalid Webhook URL!")
+
     return errors

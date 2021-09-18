@@ -1,0 +1,22 @@
+<div role="tabpanel" class="tab-pane config-section active" id="other">
+	<form method="POST" autocomplete="off" class="w-100">
+        <div class="form-group">
+            <label>
+                Enable Other Webhook Notifier
+            </label>
+            <select class="form-control custom-select" name="other_notifier">
+                <option value="true" {% if config.get("other_notifier") == "true" %}selected{% endif %}>True</option>
+                <option value="false" {% if config.get("other_notifier") == "false" %}selected{% endif %}>False</option>
+            </select>
+        </div>
+        <div class="form-group">
+			<label>
+				Other Webhook URL
+			</label>
+			<input type="text" class="form-control" id="other-webhook-url" name="other_webhook_url" value="{{ config.get("other_webhook_url") }}">
+        </div>
+
+        <input type="hidden" value="{{ Session.nonce }}" name="nonce" id="nonce" />
+        <button type="submit" class="btn btn-md btn-primary float-right">Update</button>
+	</form>
+</div>

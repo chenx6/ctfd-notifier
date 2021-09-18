@@ -26,6 +26,15 @@ def discord_notify(solve, webhookurl):
         print(e)
 
 
+def other_notify(solve, webhookurl):
+    text = _getText(solve)
+    data = {"message": text}
+    try:
+        rq.get(webhookurl, params=data)
+    except rq.exceptions.RequestException as e:
+        print(e)
+
+
 def twitter_notify(solve, consumer_key, consumer_secret, access_token, access_token_secret, hashtags):
     text = _getText(solve, hashtags)
     try:
@@ -49,6 +58,9 @@ def on_solve(mapper, conn, solve):
             twitter_notify(solve, config.get("twitter_consumer_key"), config.get("twitter_consumer_secret"),
                            config.get("twitter_access_token"), config.get("twitter_access_token_secret"),
                            config.get("twitter_hashtags"))
+        
+        if config.get("other_notifier") == "true":
+            other_notify(solve, config.get("other_webhook_url"))
 
 
 def _getSolves(challenge_id):
@@ -86,9 +98,9 @@ def _getText(solve, hashtags=""):
     place = user.get_place(admin=True)
 
     if not hashtags == "":
-        text = f"{user.name} got first blood on {challenge.name} and is now in {place} place with {score} points! {hashtags}"
+        text = f"{user.name} 在 {challenge.name} 获得一血，并且现在在第 {place} 名，并获得了 {score} 分 {hashtags}"
     else:
-        text = f"{user.name} got first blood on {challenge.name} and is now in {place} place with {score} points!"
+        text = f"{user.name} 在 {challenge.name} 获得一血，并且现在在第 {place} 名，并获得了 {score} 分"
 
     return text
 
